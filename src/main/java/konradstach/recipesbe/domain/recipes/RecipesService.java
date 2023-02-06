@@ -1,13 +1,16 @@
 package konradstach.recipesbe.domain.recipes;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import konradstach.recipesbe.domain.model.*;
 import konradstach.recipesbe.infrastructure.repository.RecipesRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RecipesService {
@@ -25,14 +28,18 @@ public class RecipesService {
     }
 
     public FullRecipeDTO getFullRecipeById(String id) {
-        return null;
+        Recipe recipe = recipesRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Entity with id %s not found", id)));
+        return RecipeMapper.toFullRecipeDTO(recipe);
     }
 
     public FullRecipeDTO createNewRecipe(CreateNewRecipeRequest request) {
-        return null;
+        Recipe recipe = RecipeMapper.toRecipe(request);
+        Recipe savedRecipe = recipesRepository.save(recipe);
+        log.info("New recipe added: {}", savedRecipe);
+        return RecipeMapper.toFullRecipeDTO(savedRecipe);
     }
 
-    public FullRecipeDTO editRecipe(String id, CreateNewRecipeRequest request){
+    public FullRecipeDTO editRecipe(String id, CreateNewRecipeRequest request) {
         return null;
     }
 }

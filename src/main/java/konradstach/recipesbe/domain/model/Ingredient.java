@@ -12,4 +12,8 @@ import lombok.NoArgsConstructor;
 public class Ingredient {
     private Double amount;
     private String ingredientName;
+
+    public Ingredient(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
 }

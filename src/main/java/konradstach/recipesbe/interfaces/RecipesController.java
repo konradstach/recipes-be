@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/recipes")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RecipesController {
 
     private RecipesService recipesService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping()
     public List<RecipeDTO> getAllRecipes(@RequestParam(required = false) String name) {
         if(name == null || name.isEmpty()){

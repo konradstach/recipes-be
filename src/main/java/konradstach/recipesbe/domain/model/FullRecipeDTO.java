@@ -1,12 +1,20 @@
 package konradstach.recipesbe.domain.model;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class FullRecipeDTO {
+    private String id;
     private String name;
-    private List<String> steps;
+    private boolean favourite;
+    private String prepTime;
+    private String withCookTime;
+    private String imgUrl;
+    private short energy;
+    private short servings;
     private List<String> tags;
-    private int portions;
-    private List<Ingredient> ingredients;
-
+    private List<IngredientDTO> ingredients;
+    private List<String> steps;
 }
