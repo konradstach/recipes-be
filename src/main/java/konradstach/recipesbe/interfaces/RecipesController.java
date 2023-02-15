@@ -1,11 +1,10 @@
 package konradstach.recipesbe.interfaces;
 
 import konradstach.recipesbe.domain.recipes.RecipesService;
-import konradstach.recipesbe.domain.model.CreateNewRecipeRequest;
+import konradstach.recipesbe.domain.model.CreateEditRecipeRequest;
 import konradstach.recipesbe.domain.model.FullRecipeDTO;
 import konradstach.recipesbe.domain.model.RecipeDTO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,12 +31,20 @@ public class RecipesController {
     }
 
     @PostMapping()
-    public FullRecipeDTO createNewRecipe(@RequestBody CreateNewRecipeRequest request) {
+    public FullRecipeDTO createNewRecipe(@RequestBody CreateEditRecipeRequest request) {
         return recipesService.createNewRecipe(request);
     }
+//
+//    @PutMapping("/{id}")
+//    public FullRecipeDTO editRecipe(@PathVariable String id, @RequestBody CreateEditRecipeRequest request) {
+//        return recipesService.editRecipe(id, request);
+//    }
 
-    @PutMapping("/{id}")
-    public FullRecipeDTO editRecipe(@PathVariable String id, @RequestBody CreateNewRecipeRequest request) {
+    @PatchMapping("/{id}")
+    public FullRecipeDTO editRecipe(@PathVariable String id, @RequestBody CreateEditRecipeRequest request) {
+        if(request.getName()==null){
+            return recipesService.toggleFavourites(id, request.isFavourite());
+        }
         return recipesService.editRecipe(id, request);
     }
 }

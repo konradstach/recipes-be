@@ -7,8 +7,8 @@ public class RecipeDTO {
 
     private String id;
     private String name;
-    private String prepTime;
-    private String withCookTime;
+    private short prepTime;
+    private short withCookTime;
     private String imgUrl;
     private int energy;
     private boolean favourite;

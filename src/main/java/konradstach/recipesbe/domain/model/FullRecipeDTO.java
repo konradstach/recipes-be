@@ -9,8 +9,8 @@ public class FullRecipeDTO {
     private String id;
     private String name;
     private boolean favourite;
-    private String prepTime;
-    private String withCookTime;
+    private short prepTime;
+    private short withCookTime;
     private String imgUrl;
     private short energy;
     private short servings;

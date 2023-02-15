@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,14 +33,31 @@ public class RecipesService {
         return RecipeMapper.toFullRecipeDTO(recipe);
     }
 
-    public FullRecipeDTO createNewRecipe(CreateNewRecipeRequest request) {
+    public FullRecipeDTO createNewRecipe(CreateEditRecipeRequest request) {
         Recipe recipe = RecipeMapper.toRecipe(request);
         Recipe savedRecipe = recipesRepository.save(recipe);
         log.info("New recipe added: {}", savedRecipe);
         return RecipeMapper.toFullRecipeDTO(savedRecipe);
     }
 
-    public FullRecipeDTO editRecipe(String id, CreateNewRecipeRequest request) {
-        return null;
+    public FullRecipeDTO editRecipe(String id, CreateEditRecipeRequest request) {
+        Recipe recipe = RecipeMapper.toRecipe(request);
+        recipe.setId(id);
+        Recipe updatedRecipe = recipesRepository.save(recipe);
+        log.info("Recipe updated: {}.", updatedRecipe);
+        return RecipeMapper.toFullRecipeDTO(updatedRecipe);
+    }
+
+    public FullRecipeDTO toggleFavourites(String id, boolean favouriteValue) {
+        Recipe recipe = recipesRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        recipe.setFavourite(favouriteValue);
+
+        Recipe updatedRecipe = recipesRepository.save(recipe);
+
+        String addedRemovedString = recipe.isFavourite() ? "added to" : "removed from";
+        String logInfo = "Recipe " + recipe.getName() + " was " + addedRemovedString + " favourites.";
+        log.info(logInfo);
+
+        return RecipeMapper.toFullRecipeDTO(updatedRecipe);
     }
 }

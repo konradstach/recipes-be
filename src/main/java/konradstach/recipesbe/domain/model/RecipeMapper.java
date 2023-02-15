@@ -17,8 +17,8 @@ public class RecipeMapper {
         RecipeDTO dto = new RecipeDTO();
         dto.setId(recipe.getId());
         dto.setName(recipe.getName());
-        dto.setPrepTime(recipe.getPrepTime());
-        dto.setWithCookTime(recipe.getWithCookingTime());
+        dto.setPrepTime(recipe.getPrepTimeMins());
+        dto.setWithCookTime(recipe.getWithCookingTimeMins());
         dto.setImgUrl(recipe.getImgUrl());
         dto.setEnergy(recipe.getEnergy());
         dto.setFavourite(recipe.isFavourite());
@@ -30,8 +30,8 @@ public class RecipeMapper {
         dto.setId(recipe.getId());
         dto.setName(recipe.getName());
         dto.setFavourite(recipe.isFavourite());
-        dto.setPrepTime(recipe.getPrepTime());
-        dto.setWithCookTime(recipe.getWithCookingTime());
+        dto.setPrepTime(recipe.getPrepTimeMins());
+        dto.setWithCookTime(recipe.getWithCookingTimeMins());
         dto.setImgUrl(recipe.getImgUrl());
         dto.setEnergy(recipe.getEnergy());
         dto.setServings(recipe.getPortions());
@@ -52,18 +52,26 @@ public class RecipeMapper {
         return dto;
     }
 
-    public static Recipe toRecipe(CreateNewRecipeRequest request) {
+    public static Recipe toRecipe(CreateEditRecipeRequest request) {
         Recipe newRecipe = new Recipe();
-        newRecipe.setId(request.getName().toLowerCase().replace(" ", "-"));
+        if (request.getName() != null) {
+            newRecipe.setId(request.getName().toLowerCase().replace(" ", "-"));
+        }
         newRecipe.setName(request.getName());
         newRecipe.setPortions(request.getPortions());
-        newRecipe.setPrepTime(request.getPrepTime() + "min");
-        newRecipe.setWithCookingTime(request.getWithCookTime() + "min");
+        newRecipe.setPrepTimeMins(request.getPrepTime());
+        newRecipe.setWithCookingTimeMins(request.getWithCookTime());
         newRecipe.setImgUrl(request.getImgUrl());
         newRecipe.setEnergy(request.getEnergy());
-        newRecipe.setTags(Arrays.asList("Jedzenie")); //TODO
-        newRecipe.setIngredients(extractIngredientsFromString(request.getIngredients()));
-        newRecipe.setSteps(extractStepsFromString(request.getSteps()));
+        newRecipe.setFavourite(request.isFavourite());
+//        newRecipe.setTags(Arrays.asList("Jedzenie")); //TODO
+        if (request.getIngredients() != null) {
+            newRecipe.setIngredients(extractIngredientsFromString(request.getIngredients()));
+        }
+        if (request.getSteps() != null) {
+            newRecipe.setSteps(extractStepsFromString(request.getSteps()));
+
+        }
 
         return newRecipe;
     }
@@ -76,9 +84,7 @@ public class RecipeMapper {
 
         for (String ingredientString : split) {
             String trimmed = ingredientString.trim();
-            OptionalInt firstLetterIndex = IntStream.range(0, trimmed.length())
-                    .filter(i -> Character.isLetter(trimmed.charAt(i)))
-                    .findFirst();
+            OptionalInt firstLetterIndex = IntStream.range(0, trimmed.length()).filter(i -> Character.isLetter(trimmed.charAt(i))).findFirst();
 
             if (firstLetterIndex.isPresent()) {
                 if (firstLetterIndex.getAsInt() > 0) {
@@ -95,9 +101,6 @@ public class RecipeMapper {
     }
 
     private static List<String> extractStepsFromString(String steps) {
-        return Arrays
-                .stream(steps.split("\n"))
-                .map(String::trim)
-                .collect(Collectors.toList());
+        return Arrays.stream(steps.split("\n")).map(String::trim).collect(Collectors.toList());
     }
 }
