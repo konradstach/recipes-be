@@ -5,12 +5,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @DynamoDBTable(tableName = "recipes")
 @Getter
 @Setter
+@ToString
 public class Recipe {
 
     @DynamoDBHashKey(attributeName = "id")
@@ -20,16 +23,16 @@ public class Recipe {
     private String name;
 
     @DynamoDBAttribute(attributeName = "steps")
-    private List<String> steps;
+    private List<String> steps = new ArrayList<>();
 
     @DynamoDBAttribute(attributeName = "tags")
-    private List<String> tags;
+    private List<String> tags = new ArrayList<>();
 
     @DynamoDBAttribute(attributeName = "portions")
     private short portions;
 
     @DynamoDBAttribute(attributeName = "ingredients")
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     @DynamoDBAttribute(attributeName = "favourite")
     private boolean favourite;

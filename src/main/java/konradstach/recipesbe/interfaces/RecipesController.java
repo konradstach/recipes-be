@@ -1,9 +1,11 @@
 package konradstach.recipesbe.interfaces;
 
+import konradstach.recipesbe.domain.model.ScrappedRecipeDTO;
 import konradstach.recipesbe.domain.recipes.RecipesService;
 import konradstach.recipesbe.domain.model.CreateEditRecipeRequest;
 import konradstach.recipesbe.domain.model.FullRecipeDTO;
 import konradstach.recipesbe.domain.model.RecipeDTO;
+import konradstach.recipesbe.domain.recipes.WebPageScrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class RecipesController {
 
     private RecipesService recipesService;
+    private WebPageScrapper webPageScrapper;
 
     @GetMapping()
     public List<RecipeDTO> getAllRecipes(@RequestParam(required = false) String name) {
@@ -46,5 +49,10 @@ public class RecipesController {
             return recipesService.toggleFavourites(id, request.isFavourite());
         }
         return recipesService.editRecipe(id, request);
+    }
+
+    @GetMapping("/scrap")
+    public ScrappedRecipeDTO scrapRecipeFromWebPage(@RequestParam String url){
+        return webPageScrapper.getScrappedRecipeFromKwestiaSmaku(url);
     }
 }

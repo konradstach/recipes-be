@@ -2,6 +2,7 @@ package konradstach.recipesbe.domain.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class FullRecipeDTO {
     private String imgUrl;
     private short energy;
     private short servings;
-    private List<String> tags;
-    private List<IngredientDTO> ingredients;
-    private List<String> steps;
+    private List<String> tags = new ArrayList<>();
+    private List<IngredientDTO> ingredients = new ArrayList<>();
+    private List<String> steps = new ArrayList<>();
 }
