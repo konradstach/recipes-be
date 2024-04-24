@@ -20,6 +20,11 @@ public class RecipesController {
     private RecipesService recipesService;
     private WebPageScrapper webPageScrapper;
 
+    @GetMapping("/health")
+    public String healthCheck(){
+        return "Alive!!!";
+    }
+
     @GetMapping()
     public List<RecipeDTO> getAllRecipes(@RequestParam(required = false) String name) {
         if(name == null || name.isEmpty()){
@@ -37,11 +42,6 @@ public class RecipesController {
     public FullRecipeDTO createNewRecipe(@RequestBody CreateEditRecipeRequest request) {
         return recipesService.createNewRecipe(request);
     }
-//
-//    @PutMapping("/{id}")
-//    public FullRecipeDTO editRecipe(@PathVariable String id, @RequestBody CreateEditRecipeRequest request) {
-//        return recipesService.editRecipe(id, request);
-//    }
 
     @PatchMapping("/{id}")
     public FullRecipeDTO editRecipe(@PathVariable String id, @RequestBody CreateEditRecipeRequest request) {
